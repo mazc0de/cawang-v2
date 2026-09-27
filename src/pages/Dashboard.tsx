@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Wallet, Activity, BrainCircuit } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, Activity } from 'lucide-react';
 import { getTransactions, getAccounts, getBudgets, getSettings } from '../lib/queries';
 import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
@@ -82,15 +82,15 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       {/* Hero Welcome Section */}
-      <div className="relative overflow-hidden hero-gradient rounded-[40px] p-10 flex flex-col md:flex-row shadow-xl shadow-indigo-500/20">
+      <div className="relative overflow-hidden hero-gradient rounded-3xl md:rounded-[40px] p-6 md:p-10 flex flex-col md:flex-row shadow-xl shadow-indigo-500/20">
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/20 rounded-full blur-[60px]"></div>
         <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-900/30 rounded-full blur-[60px]"></div>
         
         <div className="relative z-10 flex-1">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-4 md:mb-6">
             ✨ Welcome back!
           </div>
-          <h1 className="text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl">
             You have <span className={budgetLeft >= 0 ? "text-emerald-300" : "text-rose-300"}>Rp {Math.abs(budgetLeft).toLocaleString('id-ID')}</span> {budgetLeft >= 0 ? 'left to spend' : 'over budget'} this cycle.
           </h1>
         </div>
@@ -105,8 +105,8 @@ export default function Dashboard() {
       </div>
 
       {/* Schedule & AI Insights Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 glass-panel rounded-[32px] p-8">
+      <div className="grid grid-cols-1 gap-6">
+        <div className="glass-panel rounded-[32px] p-8">
           <h2 className="text-xl font-extrabold text-slate-800 mb-6">Transactions Today</h2>
           {loading ? (
             <ListSkeleton />
@@ -143,6 +143,7 @@ export default function Dashboard() {
           )}
         </div>
 
+        {/* AI Insights - Temporarily hidden
         <div className="bg-[#312e81] rounded-[32px] p-8 shadow-xl shadow-indigo-900/20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-[40px]"></div>
           <h2 className="text-xl font-extrabold text-white mb-6 relative z-10 flex items-center gap-2">
@@ -159,6 +160,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        */}
       </div>
     </div>
   );

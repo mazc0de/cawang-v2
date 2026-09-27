@@ -52,4 +52,13 @@
   .hero-gradient {
     background: radial-gradient(circle at top left, #4f46e5 0%, #6366f1 40%, #8b5cf6 100%);
   }
+
+  /* Utility to hide scrollbar but allow scrolling */
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

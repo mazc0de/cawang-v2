@@ -134,10 +134,10 @@ export default function Budgeting() {
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white p-4 md:px-5 md:py-2.5 rounded-full md:rounded-xl font-bold shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all active:scale-95 fixed bottom-6 right-6 z-40 md:static md:z-auto"
         >
-          <Plus size={20} />
-          New Budget
+          <Plus size={24} className="md:w-5 md:h-5" />
+          <span className="hidden md:inline">New Budget</span>
         </button>
       </div>
 

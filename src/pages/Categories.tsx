@@ -108,10 +108,10 @@ export default function Categories() {
             setModalType('expense');
             setIsModalOpen(true);
           }}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-indigo-200 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white p-4 md:px-5 md:py-2.5 rounded-full md:rounded-xl font-bold shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all active:scale-95 fixed bottom-6 right-6 z-40 md:static md:z-auto"
         >
-          <Plus size={20} />
-          <span className="hidden sm:inline">Add Category</span>
+          <Plus size={24} className="md:w-5 md:h-5" />
+          <span className="hidden md:inline">Add Category</span>
         </button>
       </div>
 

@@ -178,8 +178,8 @@ export default function Transactions() {
   const isToday = isSameDate(new Date().toISOString(), selectedDate);
 
   return (
-    <div className="flex flex-col gap-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-6 md:gap-8 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Transactions</h1>
           <p className="text-slate-500 mt-1">Manage and track all your financial activities.</p>
@@ -191,23 +191,23 @@ export default function Transactions() {
             setNoteStr('');
             setIsModalOpen(true);
           }}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 flex items-center gap-2 transition-all active:scale-95"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white p-4 md:px-5 md:py-2.5 rounded-full md:rounded-xl font-bold shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all active:scale-95 fixed bottom-6 right-6 z-40 md:static md:z-auto"
         >
-          <Plus size={20} />
-          New Transaction
+          <Plus size={24} className="md:w-5 md:h-5" />
+          <span className="hidden md:inline">New Transaction</span>
         </button>
       </div>
 
       {/* Date Navigation */}
-      <div className="flex items-center justify-between bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-2">
-        <div className="flex items-center gap-5">
-          <div className="p-4 bg-indigo-50 text-indigo-500 rounded-2xl">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-slate-100 mb-2 gap-4">
+        <div className="flex items-center gap-4 md:gap-5">
+          <div className="p-4 bg-indigo-50 text-indigo-500 rounded-2xl hidden sm:block">
             <Calendar size={28} />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Sedang Dilihat</p>
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-extrabold text-slate-800">
+            <p className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">Sedang Dilihat</p>
+            <div className="flex items-center gap-2 md:gap-3">
+              <h2 className="text-lg md:text-2xl font-extrabold text-slate-800">
                 {selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
               </h2>
               {isToday && (
@@ -252,14 +252,14 @@ export default function Transactions() {
       </div>
 
       {/* Transactions List */}
-      <div className="glass-panel rounded-[32px] p-8 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-          <div className="flex items-center gap-2 bg-slate-100/50 p-1 rounded-2xl w-full md:w-auto">
+      <div className="glass-panel rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center w-full">
+          <div className="flex items-center gap-1 md:gap-2 bg-slate-100/50 p-1 rounded-2xl w-full md:w-auto overflow-x-auto hide-scrollbar">
             {['All', 'Income', 'Expense', 'Transfer'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-2 rounded-xl font-bold text-sm transition-all ${
+                className={`whitespace-nowrap px-4 md:px-6 py-2 rounded-xl font-bold text-sm transition-all ${
                   activeTab === tab ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 }`}
               >

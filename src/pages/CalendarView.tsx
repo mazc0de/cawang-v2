@@ -81,12 +81,12 @@ export default function CalendarView() {
 
   return (
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
           <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Calendar</h1>
           <p className="text-slate-500 mt-1">View your daily cashflow across the salary cycle.</p>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-start sm:items-end">
           <div className="flex items-center gap-4 mb-2">
             <button onClick={handlePrev} className="p-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 cursor-pointer">
               <ChevronLeft size={20} />
@@ -100,8 +100,10 @@ export default function CalendarView() {
         </div>
       </div>
 
-      <div className="glass-panel rounded-[32px] p-8">
-        <div className="grid grid-cols-7 gap-4 mb-4">
+      <div className="glass-panel rounded-3xl md:rounded-[32px] p-4 md:p-8 overflow-hidden">
+        <div className="overflow-x-auto pb-4">
+          <div className="min-w-[700px]">
+            <div className="grid grid-cols-7 gap-2 md:gap-4 mb-4">
           {daysOfWeek.map(d => (
             <div key={d} className="text-center font-bold text-slate-400 text-sm">{d}</div>
           ))}
@@ -145,6 +147,8 @@ export default function CalendarView() {
             })}
           </div>
         )}
+          </div>
+        </div>
       </div>
     </div>
   );
