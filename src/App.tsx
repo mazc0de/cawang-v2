@@ -10,6 +10,7 @@ import CalendarView from './pages/CalendarView';
 import Settings from './pages/Settings';
 import Landing from './pages/Landing';
 import Auth from './pages/Auth';
+import UpdatePassword from './pages/UpdatePassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
           
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
