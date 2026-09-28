@@ -1,8 +1,23 @@
+import { useState, useEffect } from 'react';
 import { ArrowRight, Wallet, PieChart, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [hasSession, setHasSession] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setHasSession(!!session);
+    });
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
@@ -16,17 +31,19 @@ export default function Landing() {
             <span className="font-extrabold text-2xl tracking-tight text-slate-800">Cawang</span>
           </div>
           <div className="flex items-center gap-4">
+            {!hasSession && (
+              <button 
+                onClick={() => navigate('/auth')}
+                className="text-slate-600 font-bold hover:text-indigo-600 transition-colors"
+              >
+                Sign In
+              </button>
+            )}
             <button 
-              onClick={() => navigate('/auth')}
-              className="text-slate-600 font-bold hover:text-indigo-600 transition-colors"
-            >
-              Sign In
-            </button>
-            <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate(hasSession ? '/app' : '/auth')}
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 transition-all active:scale-95"
             >
-              Get Started
+              {hasSession ? 'Go to Dashboard' : 'Get Started'}
             </button>
           </div>
         </div>
@@ -56,10 +73,10 @@ export default function Landing() {
           
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <button 
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate(hasSession ? '/app' : '/auth')}
               className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-extrabold text-lg shadow-xl shadow-indigo-200 flex items-center justify-center gap-2 transition-all active:scale-95 group"
             >
-              Open Dashboard
+              {hasSession ? 'Open Dashboard' : 'Get Started Now'}
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
