@@ -273,3 +273,18 @@ export async function updateSettings(payload: { salary_cycle_start_date: number 
   if (error) throw error;
   return data;
 }
+
+export async function getSafePayTransactions() {
+  const { data, error } = await supabase
+    .from('transactions')
+    .select(`
+      *,
+      accounts:account_id(name, type),
+      categories:category_id(name, icon)
+    `)
+    .eq('is_safe_pay', true)
+    .eq('safe_pay_status', 'PENDING')
+    .order('date', { ascending: false });
+  if (error) throw error;
+  return data || [];
+}

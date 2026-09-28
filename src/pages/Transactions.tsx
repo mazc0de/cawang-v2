@@ -31,6 +31,8 @@ export default function Transactions() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
 
+  const [isSafePay, setIsSafePay] = useState(false);
+
   useEffect(() => {
     loadTransactions();
   }, []);
@@ -43,7 +45,8 @@ export default function Transactions() {
         getCategories(),
         getAccounts()
       ]);
-      setTransactions(txData);
+      // Filter out pending safe-pay from normal transactions view
+      setTransactions(txData.filter((t: any) => !(t.is_safe_pay && t.safe_pay_status === 'PENDING')));
       setCategories(catData);
       setAccounts(accData);
     } catch (error) {
@@ -68,6 +71,8 @@ export default function Transactions() {
         date: new Date(form.date.value).toISOString(),
         amount: amount,
         note: form.desc.value,
+        is_safe_pay: isSafePay,
+        safe_pay_status: isSafePay ? 'PENDING' : null
       };
 
       if (transactionType === 'transfer') {
@@ -81,7 +86,8 @@ export default function Transactions() {
       await createTransaction(payload);
       
       setIsModalOpen(false);
-      toast.success('Transaction saved successfully!');
+      setIsSafePay(false);
+      toast.success(isSafePay ? 'Safe-Pay transaction saved!' : 'Transaction saved successfully!');
       loadTransactions();
     } catch (error: any) {
       toast.error('Failed to save transaction');
@@ -503,6 +509,20 @@ export default function Transactions() {
                   }}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/50" 
                 />
+              </div>
+
+              <div className="flex items-center gap-3 bg-indigo-50 p-4 rounded-xl border border-indigo-100 mt-2">
+                <input
+                  type="checkbox"
+                  id="safepay"
+                  checked={isSafePay}
+                  onChange={(e) => setIsSafePay(e.target.checked)}
+                  className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 bg-white border-indigo-200"
+                />
+                <label htmlFor="safepay" className="flex-1 cursor-pointer">
+                  <div className="font-bold text-indigo-900 text-sm">Gunakan Safe-Pay</div>
+                  <p className="text-xs text-indigo-600/80 mt-0.5">Transaksi ini akan ditahan dan tidak langsung dihitung sebagai pengeluaran selesai.</p>
+                </label>
               </div>
 
               <button type="submit" className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-extrabold text-lg shadow-lg shadow-indigo-200 transition-all active:scale-95">

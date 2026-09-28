@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Wallet, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, Activity, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
 import { getTransactions, getAccounts, getBudgets, getSettings } from '../lib/queries';
 import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
@@ -37,7 +37,9 @@ export default function Dashboard() {
     loadData();
   }, []);
 
-  const totalBalance = accounts.reduce((acc, curr) => acc + Number(curr.balance), 0);
+  const availableBalance = accounts.reduce((acc, curr) => acc + Number(curr.balance), 0);
+  const safePayLocked = transactions.filter(t => t.is_safe_pay && t.safe_pay_status === 'PENDING').reduce((acc, curr) => acc + Number(curr.amount), 0);
+  const totalBalance = availableBalance + safePayLocked;
   
   // Today's Transactions
   const today = new Date();
@@ -90,18 +92,34 @@ export default function Dashboard() {
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-4 md:mb-6">
             ✨ Welcome back!
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl">
-            You have <span className={budgetLeft >= 0 ? "text-emerald-300" : "text-rose-300"}>Rp {Math.abs(budgetLeft).toLocaleString('id-ID')}</span> {budgetLeft >= 0 ? 'left to spend' : 'over budget'} this cycle.
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl flex flex-wrap items-center gap-2">
+            <span>You have</span>
+            <span className={budgetLeft >= 0 ? "text-emerald-300 flex items-center gap-2" : "text-rose-300 flex items-center gap-2"}>
+              Rp {Math.abs(budgetLeft).toLocaleString('id-ID')}
+              <div className="relative group flex items-center justify-center">
+                <Info size={28} className="text-white/70 hover:text-white cursor-pointer transition-colors" />
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-sm font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
+                  Budget Left
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-800 rotate-45"></div>
+                </div>
+              </div>
+            </span>
+            <span>{budgetLeft >= 0 ? 'left to spend' : 'over budget'} this cycle.</span>
           </h1>
         </div>
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Total Balance" amount={`Rp ${totalBalance.toLocaleString('id-ID')}`} trend="Up to date" icon={Wallet} color="indigo" />
-        <StatCard title="Income (Today)" amount={`Rp ${todayIncome.toLocaleString('id-ID')}`} trend="Today" icon={TrendingUp} color="emerald" />
-        <StatCard title="Expense (Today)" amount={`Rp ${todayExpense.toLocaleString('id-ID')}`} trend="Today" icon={TrendingDown} color="rose" />
-        <StatCard title="Budget Left" amount={`Rp ${budgetLeft.toLocaleString('id-ID')}`} trend="This cycle" icon={Activity} color="amber" />
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard title="Total Balance" amount={`Rp ${totalBalance.toLocaleString('id-ID')}`} trend="All accounts + Safe-Pay" icon={Wallet} color="indigo" />
+          <StatCard title="Available Balance" amount={`Rp ${availableBalance.toLocaleString('id-ID')}`} trend="Active balance" icon={CheckCircle2} color="emerald" />
+          <StatCard title="Safe-Pay" amount={`Rp ${safePayLocked.toLocaleString('id-ID')}`} trend="Locked Funds" icon={ShieldCheck} color="indigo" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <StatCard title="Income (Today)" amount={`Rp ${todayIncome.toLocaleString('id-ID')}`} trend="Today" icon={TrendingUp} color="emerald" />
+          <StatCard title="Expense (Today)" amount={`Rp ${todayExpense.toLocaleString('id-ID')}`} trend="Today" icon={TrendingDown} color="rose" />
+        </div>
       </div>
 
       {/* Schedule & AI Insights Row */}

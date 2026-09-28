@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User } from 'lucide-react';
+import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User, ShieldCheck } from 'lucide-react';
 import clsx from 'clsx';
 import { supabase } from '../lib/supabase';
 
@@ -18,6 +18,7 @@ export default function DashboardLayout() {
   const navItems = [
     { name: 'Dashboard', path: '/app', icon: LayoutDashboard },
     { name: 'Transactions', path: '/app/transactions', icon: Receipt },
+    { name: 'Safe-Pay', path: '/app/safe-pay', icon: ShieldCheck },
     { name: 'Accounts', path: '/app/accounts', icon: Wallet },
     { name: 'Categories', path: '/app/categories', icon: Tags },
     { name: 'Budgeting', path: '/app/budgeting', icon: PieChart },

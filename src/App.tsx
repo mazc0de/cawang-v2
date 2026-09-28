@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
+import SafePay from './pages/SafePay';
 import Accounts from './pages/Accounts';
 import Categories from './pages/Categories';
 import Budgeting from './pages/Budgeting';
@@ -28,6 +29,7 @@ function App() {
             <Route path="/app" element={<DashboardLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="transactions" element={<Transactions />} />
+              <Route path="safe-pay" element={<SafePay />} />
               <Route path="accounts" element={<Accounts />} />
               <Route path="categories" element={<Categories />} />
               <Route path="budgeting" element={<Budgeting />} />
