@@ -109,7 +109,6 @@ export default function DashboardLayout() {
           </div>
           <button 
             onClick={async () => {
-              const { supabase } = await import('../lib/supabase');
               await supabase.auth.signOut();
             }}
             className="w-full py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors text-center"

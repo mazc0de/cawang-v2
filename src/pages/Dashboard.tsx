@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Wallet, Activity, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
 import { getTransactions, getAccounts, getBudgets, getSettings } from '../lib/queries';
 import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
