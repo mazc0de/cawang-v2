@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, ArrowRightLeft, ChevronDown, Trash2, ChevronLeft, ChevronRight, Calendar, Edit2 } from 'lucide-react';
+import { Plus, ArrowRightLeft, ChevronDown, Trash2, ChevronLeft, ChevronRight, Calendar, Edit2, Search } from 'lucide-react';
 import Modal from '../components/Modal';
 import ConfirmModal from '../components/ConfirmModal';
 import Calculator from '../components/Calculator';
@@ -13,6 +13,7 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle';
 export default function Transactions() {
   useDocumentTitle('Transactions');
   const [activeTab, setActiveTab] = useState('All');
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -176,8 +177,20 @@ export default function Transactions() {
   };
 
   const dailyTransactions = transactions.filter(t => isSameDate(t.date, selectedDate));
-  const filteredTransactions = dailyTransactions.filter(t => activeTab === 'All' || t.type.toLowerCase() === activeTab.toLowerCase());
   
+  const displayedTransactions = searchKeyword.trim()
+    ? transactions.filter(t => 
+        ((t.note?.toLowerCase() || '').includes(searchKeyword.toLowerCase()) || 
+         (t.categories?.name?.toLowerCase() || '').includes(searchKeyword.toLowerCase())) &&
+        (activeTab === 'All' || t.type.toLowerCase() === activeTab.toLowerCase())
+      )
+    : dailyTransactions.filter(t => activeTab === 'All' || t.type.toLowerCase() === activeTab.toLowerCase());
+
+  const filteredTransactions = displayedTransactions;
+
+  const searchIncome = searchKeyword.trim() ? filteredTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0) : 0;
+  const searchExpense = searchKeyword.trim() ? filteredTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0) : 0;
+
   const dailyIncome = dailyTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0);
   const dailyExpense = dailyTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0);
   
@@ -259,8 +272,8 @@ export default function Transactions() {
 
       {/* Transactions List */}
       <div className="glass-panel rounded-3xl md:rounded-[32px] p-4 md:p-8 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center w-full">
-          <div className="flex items-center gap-1 md:gap-2 bg-slate-100/50 p-1 rounded-2xl w-full md:w-auto overflow-x-auto hide-scrollbar">
+        <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center w-full">
+          <div className="flex items-center gap-1 md:gap-2 bg-slate-100/50 p-1 rounded-2xl w-full lg:w-auto overflow-x-auto hide-scrollbar">
             {['All', 'Income', 'Expense', 'Transfer'].map(tab => (
               <button
                 key={tab}
@@ -273,7 +286,42 @@ export default function Transactions() {
               </button>
             ))}
           </div>
+
+          <div className="relative w-full lg:w-72">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input 
+              type="text" 
+              placeholder="Search transactions..."
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              className="w-full pl-11 pr-4 py-2.5 bg-slate-100/80 border-none rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-400 font-medium"
+            />
+          </div>
         </div>
+
+        {searchKeyword.trim() && (
+          <div className="flex flex-wrap gap-4 p-4 md:p-5 bg-indigo-50/50 rounded-2xl items-center justify-between border border-indigo-100/50">
+             <div className="flex items-center gap-3">
+               <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
+                 <Search size={20} />
+               </div>
+               <div>
+                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hasil Pencarian</p>
+                 <p className="text-sm font-semibold text-slate-700">Ditemukan {filteredTransactions.length} transaksi</p>
+               </div>
+             </div>
+             <div className="flex gap-6 md:gap-8">
+               <div>
+                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pemasukkan</p>
+                 <p className="text-base md:text-lg font-bold text-emerald-600">+ Rp {searchIncome.toLocaleString('id-ID')}</p>
+               </div>
+               <div>
+                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pengeluaran</p>
+                 <p className="text-base md:text-lg font-bold text-rose-600">- Rp {searchExpense.toLocaleString('id-ID')}</p>
+               </div>
+             </div>
+          </div>
+        )}
 
         <div className="overflow-x-auto min-h-[200px]">
           {loading ? (
