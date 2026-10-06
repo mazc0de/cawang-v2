@@ -83,20 +83,20 @@ export default function CalendarView() {
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Calendar</h1>
-          <p className="text-slate-500 mt-1">View your daily cashflow across the salary cycle.</p>
+          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Calendar</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">View your daily cashflow across the salary cycle.</p>
         </div>
         <div className="flex flex-col items-start sm:items-end">
           <div className="flex items-center gap-4 mb-2">
-            <button onClick={handlePrev} className="p-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <button onClick={handlePrev} className="p-2 bg-white dark:bg-[#111111] rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 cursor-pointer">
               <ChevronLeft size={20} />
             </button>
-            <span className="font-extrabold text-lg text-slate-800 text-center min-w-[150px]">Cycle</span>
-            <button onClick={handleNext} className="p-2 bg-white rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <span className="font-extrabold text-lg text-slate-800 dark:text-slate-200 text-center min-w-[150px]">Cycle</span>
+            <button onClick={handleNext} className="p-2 bg-white dark:bg-[#111111] rounded-xl shadow-sm border border-slate-200 hover:bg-slate-50 cursor-pointer">
               <ChevronRight size={20} />
             </button>
           </div>
-          <span className="text-sm font-medium text-slate-500">{cycleLabel}</span>
+          <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{cycleLabel}</span>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export default function CalendarView() {
         ) : (
           <div className="grid grid-cols-7 gap-4">
             {paddingDays.map(p => (
-              <div key={`pad-${p}`} className="min-h-[120px] rounded-2xl bg-white/30 border border-transparent"></div>
+              <div key={`pad-${p}`} className="min-h-[120px] rounded-2xl bg-white dark:bg-[#111111]/30 border border-transparent"></div>
             ))}
             
             {calendarDays.map(dateObj => {
@@ -122,7 +122,7 @@ export default function CalendarView() {
               const isToday = new Date().toDateString() === dateObj.toDateString();
               
               return (
-                <div key={dateObj.toISOString()} className={`min-h-[120px] rounded-2xl ${isToday ? 'bg-indigo-50 border-indigo-200' : 'bg-white/70 border-white'} hover:border-indigo-300 transition-colors p-3 flex flex-col gap-2 cursor-pointer shadow-sm hover:shadow-md`}>
+                <div key={dateObj.toISOString()} className={`min-h-[120px] rounded-2xl ${isToday ? 'bg-indigo-50 border-indigo-200' : 'bg-white dark:bg-[#111111]/70 border-white'} hover:border-indigo-300 transition-colors p-3 flex flex-col gap-2 cursor-pointer shadow-sm hover:shadow-md`}>
                   <div className="flex justify-between items-start">
                     <span className={`font-bold text-lg ${isToday ? 'text-indigo-600' : 'text-slate-700'}`}>
                       {dateObj.getDate()}

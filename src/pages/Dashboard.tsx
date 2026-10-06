@@ -90,11 +90,11 @@ export default function Dashboard() {
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       {/* Hero Welcome Section */}
       <div className="relative overflow-hidden hero-gradient rounded-3xl md:rounded-[40px] p-6 md:p-10 flex flex-col md:flex-row shadow-xl shadow-indigo-500/20">
-        <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/20 rounded-full blur-[60px]"></div>
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-white dark:bg-[#111111]/20 rounded-full blur-[60px]"></div>
         <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-900/30 rounded-full blur-[60px]"></div>
         
         <div className="relative z-10 flex-1">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-4 md:mb-6">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white dark:bg-[#111111]/20 backdrop-blur-md border border-white/30 text-white text-sm font-medium mb-4 md:mb-6">
             ✨ Welcome back!
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl flex flex-wrap items-center gap-2">
@@ -130,20 +130,20 @@ export default function Dashboard() {
       {/* Schedule & AI Insights Row */}
       <div className="grid grid-cols-1 gap-6">
         <div className="glass-panel rounded-[32px] p-8">
-          <h2 className="text-xl font-extrabold text-slate-800 mb-6">Transactions Today</h2>
+          <h2 className="text-xl font-extrabold text-slate-800 dark:text-slate-200 dark:text-white mb-6">Transactions Today</h2>
           {loading ? (
             <ListSkeleton />
           ) : recentTransactions.length === 0 ? (
-            <div className="text-center text-slate-500 p-8">
+            <div className="text-center text-slate-500 dark:text-slate-400 dark:text-slate-400 p-8">
               No transactions yet.
             </div>
           ) : (
             <div className="flex flex-col gap-2">
               {recentTransactions.map((t) => (
-                <div key={t.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/50 transition-colors cursor-pointer border border-transparent hover:border-white/60">
+                <div key={t.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white dark:bg-[#111111]/50 dark:hover:bg-white dark:bg-[#111111]/5 transition-colors cursor-pointer border border-transparent hover:border-white/60 dark:hover:border-white/10">
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'
+                      t.type === 'income' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'
                     }`}>
                       {(() => {
                         const IconCmp = getCategoryIcon(t.categories?.icon);
@@ -151,12 +151,12 @@ export default function Dashboard() {
                       })()}
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-800">{t.note || 'Transaction'}</h3>
-                      <p className="text-sm text-slate-500">{t.categories?.name || 'General'} • {formatDateTime(t.date)}</p>
+                      <h3 className="font-bold text-slate-800 dark:text-slate-200 dark:text-slate-200">{t.note || 'Transaction'}</h3>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400">{t.categories?.name || 'General'} • {formatDateTime(t.date)}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className={`font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-slate-800'}`}>
+                    <span className={`font-bold ${t.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-slate-200 dark:text-slate-300'}`}>
                       {t.type === 'income' ? '+' : '-'} Rp {Number(t.amount).toLocaleString('id-ID')}
                     </span>
                   </div>
@@ -191,10 +191,10 @@ export default function Dashboard() {
 
 function StatCard({ title, amount, trend, icon: Icon, color }: any) {
   const colorMap: any = {
-    indigo: 'text-indigo-600 bg-indigo-600/10',
-    emerald: 'text-emerald-600 bg-emerald-600/10',
-    rose: 'text-rose-600 bg-rose-600/10',
-    amber: 'text-amber-600 bg-amber-600/10',
+    indigo: 'text-indigo-600 dark:text-indigo-400 bg-indigo-600/10 dark:bg-indigo-500/10',
+    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-600/10 dark:bg-emerald-500/10',
+    rose: 'text-rose-600 dark:text-rose-400 bg-rose-600/10 dark:bg-rose-500/10',
+    amber: 'text-amber-600 dark:text-amber-400 bg-amber-600/10 dark:bg-amber-500/10',
   };
   
   return (
@@ -205,9 +205,9 @@ function StatCard({ title, amount, trend, icon: Icon, color }: any) {
         </div>
       </div>
       <div>
-        <p className="text-slate-500 font-medium text-sm mb-1">{title}</p>
-        <h3 className="text-2xl font-extrabold text-slate-800">{amount}</h3>
-        <p className="text-sm font-bold mt-2 text-emerald-600">{trend}</p>
+        <p className="text-slate-500 dark:text-slate-400 dark:text-slate-400 font-medium text-sm mb-1">{title}</p>
+        <h3 className="text-2xl font-extrabold text-slate-800 dark:text-slate-200 dark:text-slate-100">{amount}</h3>
+        <p className="text-sm font-bold mt-2 text-emerald-600 dark:text-emerald-400">{trend}</p>
       </div>
     </div>
   );
@@ -218,27 +218,27 @@ function SummaryStatCard({ title, income, expense, icon: Icon }: any) {
     <div className="glass-card rounded-3xl p-6 flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-600/10 text-indigo-600">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-600/10 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
             <Icon size={24} />
           </div>
-          <h3 className="text-slate-800 font-bold text-lg">{title}</h3>
+          <h3 className="text-slate-800 dark:text-slate-200 dark:text-slate-100 font-bold text-lg">{title}</h3>
         </div>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-1.5 text-emerald-600">
+          <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
             <TrendingUp size={16} />
             <span className="text-xs font-bold tracking-wider uppercase">Income</span>
           </div>
-          <p className="font-bold text-slate-800 text-lg">Rp {income.toLocaleString('id-ID')}</p>
+          <p className="font-bold text-slate-800 dark:text-slate-200 dark:text-slate-200 text-lg">Rp {income.toLocaleString('id-ID')}</p>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-1.5 text-rose-600">
+          <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
             <TrendingDown size={16} />
             <span className="text-xs font-bold tracking-wider uppercase">Expense</span>
           </div>
-          <p className="font-bold text-slate-800 text-lg">Rp {expense.toLocaleString('id-ID')}</p>
+          <p className="font-bold text-slate-800 dark:text-slate-200 dark:text-slate-200 text-lg">Rp {expense.toLocaleString('id-ID')}</p>
         </div>
       </div>
     </div>

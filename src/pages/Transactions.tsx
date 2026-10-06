@@ -200,8 +200,8 @@ export default function Transactions() {
     <div className="flex flex-col gap-6 md:gap-8 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Transactions</h1>
-          <p className="text-slate-500 mt-1">Manage and track all your financial activities.</p>
+          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Transactions</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage and track all your financial activities.</p>
         </div>
         <button 
           onClick={() => {
@@ -218,15 +218,15 @@ export default function Transactions() {
       </div>
 
       {/* Date Navigation */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between bg-white rounded-3xl p-4 md:p-6 shadow-sm border border-slate-100 mb-2 gap-4">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between bg-white dark:bg-[#111111] rounded-3xl p-4 md:p-6 shadow-sm border border-slate-100 mb-2 gap-4">
         <div className="flex items-center gap-4 md:gap-5">
           <div className="p-4 bg-indigo-50 text-indigo-500 rounded-2xl hidden sm:block">
             <Calendar size={28} />
           </div>
           <div>
-            <p className="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">Sedang Dilihat</p>
+            <p className="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Sedang Dilihat</p>
             <div className="flex items-center gap-2 md:gap-3">
-              <h2 className="text-lg md:text-2xl font-extrabold text-slate-800">
+              <h2 className="text-lg md:text-2xl font-extrabold text-slate-800 dark:text-slate-200">
                 {selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
               </h2>
               {isToday && (
@@ -240,30 +240,30 @@ export default function Transactions() {
         
         <div className="flex gap-8 ml-auto mr-8 text-right hidden md:flex">
           <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pemasukkan</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pemasukkan</p>
             <p className="text-lg font-bold text-emerald-500">+ Rp {dailyIncome.toLocaleString('id-ID')}</p>
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pengeluaran</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pengeluaran</p>
             <p className="text-lg font-bold text-rose-500">- Rp {dailyExpense.toLocaleString('id-ID')}</p>
           </div>
         </div>
         <div className="flex items-center gap-3 bg-slate-50 p-1.5 rounded-2xl">
           <button 
             onClick={() => setSelectedDate(d => new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1))}
-            className="p-3 bg-white shadow-sm hover:shadow-md text-slate-600 rounded-xl transition-all"
+            className="p-3 bg-white dark:bg-[#111111] shadow-sm hover:shadow-md text-slate-600 dark:text-slate-300 rounded-xl transition-all"
           >
             <ChevronLeft size={20} />
           </button>
           <button 
             onClick={() => setSelectedDate(new Date())}
-            className="px-6 py-3 bg-white shadow-sm hover:shadow-md font-bold text-slate-700 rounded-xl transition-all"
+            className="px-6 py-3 bg-white dark:bg-[#111111] shadow-sm hover:shadow-md font-bold text-slate-700 rounded-xl transition-all"
           >
             Hari Ini
           </button>
           <button 
             onClick={() => setSelectedDate(d => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1))}
-            className="p-3 bg-white shadow-sm hover:shadow-md text-slate-600 rounded-xl transition-all"
+            className="p-3 bg-white dark:bg-[#111111] shadow-sm hover:shadow-md text-slate-600 dark:text-slate-300 rounded-xl transition-all"
           >
             <ChevronRight size={20} />
           </button>
@@ -279,7 +279,7 @@ export default function Transactions() {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`whitespace-nowrap px-4 md:px-6 py-2 rounded-xl font-bold text-sm transition-all ${
-                  activeTab === tab ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  activeTab === tab ? 'bg-white dark:bg-[#111111] text-indigo-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 {tab}
@@ -306,17 +306,17 @@ export default function Transactions() {
                  <Search size={20} />
                </div>
                <div>
-                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hasil Pencarian</p>
+                 <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Hasil Pencarian</p>
                  <p className="text-sm font-semibold text-slate-700">Ditemukan {filteredTransactions.length} transaksi</p>
                </div>
              </div>
              <div className="flex gap-6 md:gap-8">
                <div>
-                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pemasukkan</p>
+                 <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Pemasukkan</p>
                  <p className="text-base md:text-lg font-bold text-emerald-600">+ Rp {searchIncome.toLocaleString('id-ID')}</p>
                </div>
                <div>
-                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pengeluaran</p>
+                 <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Pengeluaran</p>
                  <p className="text-base md:text-lg font-bold text-rose-600">- Rp {searchExpense.toLocaleString('id-ID')}</p>
                </div>
              </div>
@@ -329,14 +329,14 @@ export default function Transactions() {
               <TableSkeleton />
             </div>
           ) : filteredTransactions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 text-slate-500">
+            <div className="flex flex-col items-center justify-center h-40 text-slate-500 dark:text-slate-400">
               <p>No transactions found for this date.</p>
               <p className="text-sm">Click "New Transaction" to add one.</p>
             </div>
           ) : (
             <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
-                <tr className="border-b border-slate-200 text-sm text-slate-500">
+                <tr className="border-b border-slate-200 text-sm text-slate-500 dark:text-slate-400">
                   <th className="py-4 font-semibold w-12">Type</th>
                   <th className="py-4 font-semibold">Description</th>
                   <th className="py-4 font-semibold">Category</th>
@@ -352,7 +352,7 @@ export default function Transactions() {
                     <td className="py-4">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                         t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 
-                        t.type === 'expense' ? 'bg-rose-100 text-rose-600' : 'bg-slate-200 text-slate-600'
+                        t.type === 'expense' ? 'bg-rose-100 text-rose-600' : 'bg-slate-200 text-slate-600 dark:text-slate-300'
                       }`}>
                         {t.type === 'transfer' ? (
                           <ArrowRightLeft size={18} />
@@ -364,15 +364,15 @@ export default function Transactions() {
                         )}
                       </div>
                     </td>
-                    <td className="py-4 font-bold text-slate-800">{t.note || 'No description'}</td>
-                    <td className="py-4 text-sm text-slate-600 font-medium">
+                    <td className="py-4 font-bold text-slate-800 dark:text-slate-200">{t.note || 'No description'}</td>
+                    <td className="py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">
                       {t.type === 'transfer' ? 'Transfer' : t.categories?.name || '-'}
                     </td>
-                    <td className="py-4 text-sm text-slate-600 font-medium">{t.accounts?.name || '-'}</td>
-                    <td className="py-4 text-sm text-slate-500">{formatDateTime(t.date)}</td>
+                    <td className="py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">{t.accounts?.name || '-'}</td>
+                    <td className="py-4 text-sm text-slate-500 dark:text-slate-400">{formatDateTime(t.date)}</td>
                     <td className={`py-4 text-right font-extrabold ${
                       t.type === 'income' ? 'text-emerald-600' : 
-                      t.type === 'expense' ? 'text-slate-800' : 'text-slate-600'
+                      t.type === 'expense' ? 'text-slate-800 dark:text-slate-200' : 'text-slate-600 dark:text-slate-300'
                     }`}>
                       {t.type === 'income' ? '+' : t.type === 'expense' ? '-' : ''} Rp {Number(t.amount).toLocaleString('id-ID')}
                     </td>
@@ -419,7 +419,7 @@ export default function Transactions() {
                 type="button"
                 onClick={() => setTransactionType('expense')}
                 className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
-                  transactionType === 'expense' ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  transactionType === 'expense' ? 'bg-white dark:bg-[#111111] text-rose-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pengeluaran
@@ -428,7 +428,7 @@ export default function Transactions() {
                 type="button"
                 onClick={() => setTransactionType('income')}
                 className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
-                  transactionType === 'income' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  transactionType === 'income' ? 'bg-white dark:bg-[#111111] text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pemasukkan
@@ -437,7 +437,7 @@ export default function Transactions() {
                 type="button"
                 onClick={() => setTransactionType('transfer')}
                 className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${
-                  transactionType === 'transfer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  transactionType === 'transfer' ? 'bg-white dark:bg-[#111111] text-indigo-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Transfer
@@ -565,7 +565,7 @@ export default function Transactions() {
                   id="safepay"
                   checked={isSafePay}
                   onChange={(e) => setIsSafePay(e.target.checked)}
-                  className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 bg-white border-indigo-200"
+                  className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 bg-white dark:bg-[#111111] border-indigo-200"
                 />
                 <label htmlFor="safepay" className="flex-1 cursor-pointer">
                   <div className="font-bold text-indigo-900 text-sm">Gunakan Safe-Pay</div>
@@ -581,7 +581,7 @@ export default function Transactions() {
 
           {/* Right Calculator Section */}
           <div className="w-full lg:w-72 shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 pt-6 lg:pt-0 lg:pl-8">
-            <h4 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
               Kalkulator
             </h4>
             <Calculator onResult={(val) => setAmount(val)} />
@@ -595,9 +595,9 @@ export default function Transactions() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-1 flex flex-col gap-6">
               <div className="flex bg-slate-100 p-1 rounded-2xl">
-                <button type="button" onClick={() => setTransactionType('expense')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'expense' ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Pengeluaran</button>
-                <button type="button" onClick={() => setTransactionType('income')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'income' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Pemasukkan</button>
-                <button type="button" onClick={() => setTransactionType('transfer')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'transfer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Transfer</button>
+                <button type="button" onClick={() => setTransactionType('expense')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'expense' ? 'bg-white dark:bg-[#111111] text-rose-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'}`}>Pengeluaran</button>
+                <button type="button" onClick={() => setTransactionType('income')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'income' ? 'bg-white dark:bg-[#111111] text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'}`}>Pemasukkan</button>
+                <button type="button" onClick={() => setTransactionType('transfer')} className={`flex-1 py-2.5 text-sm font-bold rounded-xl transition-all ${transactionType === 'transfer' ? 'bg-white dark:bg-[#111111] text-indigo-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'}`}>Transfer</button>
               </div>
 
               <form onSubmit={handleEditTransaction} className="flex flex-col gap-4">

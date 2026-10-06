@@ -99,8 +99,8 @@ export default function Categories() {
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight">Categories</h1>
-          <p className="text-slate-500 font-medium mt-1">Manage your income and expense categories.</p>
+          <h1 className="text-3xl font-black text-slate-800 dark:text-slate-200 tracking-tight">Categories</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">Manage your income and expense categories.</p>
         </div>
         <button 
           onClick={() => {
@@ -121,7 +121,7 @@ export default function Categories() {
             key={tab}
             onClick={() => setActiveTab(tab as any)}
             className={`px-8 py-2.5 rounded-xl font-bold text-sm transition-all capitalize ${
-              activeTab === tab ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              activeTab === tab ? 'bg-white dark:bg-[#111111] text-indigo-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
             }`}
           >
             {tab === 'expense' ? 'Pengeluaran' : 'Pemasukkan'}
@@ -138,12 +138,12 @@ export default function Categories() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.filter(c => c.type === activeTab).length === 0 ? (
-            <div className="col-span-full bg-white rounded-[24px] p-12 text-center shadow-xl shadow-slate-200/40 border border-slate-100">
+            <div className="col-span-full bg-white dark:bg-[#111111] rounded-[24px] p-12 text-center shadow-xl shadow-slate-200/40 border border-slate-100">
               <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-500">
                 <Tags size={32} />
               </div>
-              <h3 className="text-xl font-bold text-slate-800 mb-2">No Categories Found</h3>
-              <p className="text-slate-500 max-w-sm mx-auto">
+              <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">No Categories Found</h3>
+              <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
                 Create categories to organize your transactions better.
               </p>
             </div>
@@ -157,7 +157,7 @@ export default function Categories() {
                     {renderIcon(category.icon)}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-500 rounded-full capitalize">
+                    <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-500 dark:text-slate-400 rounded-full capitalize">
                       {category.type}
                     </span>
                     <button 
@@ -186,7 +186,7 @@ export default function Categories() {
                   </div>
                 </div>
                 
-                <h3 className="font-bold text-xl text-slate-800">{category.name}</h3>
+                <h3 className="font-bold text-xl text-slate-800 dark:text-slate-200">{category.name}</h3>
               </div>
             ))
           )}
@@ -207,7 +207,7 @@ export default function Categories() {
                 type="button"
                 onClick={() => setModalType('expense')}
                 className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-                  modalType === 'expense' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  modalType === 'expense' ? 'bg-white dark:bg-[#111111] text-slate-800 dark:text-slate-200 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pengeluaran
@@ -216,7 +216,7 @@ export default function Categories() {
                 type="button"
                 onClick={() => setModalType('income')}
                 className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-                  modalType === 'income' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  modalType === 'income' ? 'bg-white dark:bg-[#111111] text-slate-800 dark:text-slate-200 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pemasukkan
@@ -234,7 +234,7 @@ export default function Categories() {
                   className={`p-3 rounded-xl transition-all ${
                     selectedIcon === icon.name 
                       ? 'bg-indigo-500 text-white shadow-md shadow-indigo-200' 
-                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                      : 'bg-slate-100 text-slate-500 dark:text-slate-400 hover:bg-slate-200'
                   }`}
                 >
                   <icon.component size={20} />
@@ -262,7 +262,7 @@ export default function Categories() {
                 type="button"
                 onClick={() => setModalType('expense')}
                 className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-                  modalType === 'expense' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  modalType === 'expense' ? 'bg-white dark:bg-[#111111] text-slate-800 dark:text-slate-200 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pengeluaran
@@ -271,7 +271,7 @@ export default function Categories() {
                 type="button"
                 onClick={() => setModalType('income')}
                 className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-                  modalType === 'income' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                  modalType === 'income' ? 'bg-white dark:bg-[#111111] text-slate-800 dark:text-slate-200 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'
                 }`}
               >
                 Pemasukkan
@@ -289,7 +289,7 @@ export default function Categories() {
                   className={`p-3 rounded-xl transition-all ${
                     selectedIcon === icon.name 
                       ? 'bg-indigo-500 text-white shadow-md shadow-indigo-200' 
-                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                      : 'bg-slate-100 text-slate-500 dark:text-slate-400 hover:bg-slate-200'
                   }`}
                 >
                   <icon.component size={20} />

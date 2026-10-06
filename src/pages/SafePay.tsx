@@ -84,8 +84,8 @@ export default function SafePay() {
     <div className="flex flex-col gap-6 md:gap-8 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Safe-Pay</h1>
-          <p className="text-slate-500 mt-1">Transaksi tertunda yang dananya disisihkan.</p>
+          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Safe-Pay</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Transaksi tertunda yang dananya disisihkan.</p>
         </div>
         <div className="bg-indigo-50 px-6 py-4 rounded-2xl border border-indigo-100">
           <p className="text-sm font-bold text-indigo-500 uppercase tracking-wider mb-1">Total Dana Disisihkan</p>
@@ -98,13 +98,13 @@ export default function SafePay() {
           {loading ? (
             <div className="py-4"><TableSkeleton /></div>
           ) : transactions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 text-slate-500">
+            <div className="flex flex-col items-center justify-center h-40 text-slate-500 dark:text-slate-400">
               <p>Tidak ada transaksi Safe-Pay yang tertunda.</p>
             </div>
           ) : (
             <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
-                <tr className="border-b border-slate-200 text-sm text-slate-500">
+                <tr className="border-b border-slate-200 text-sm text-slate-500 dark:text-slate-400">
                   <th className="py-4 font-semibold w-12">Type</th>
                   <th className="py-4 font-semibold">Description</th>
                   <th className="py-4 font-semibold">Category</th>
@@ -119,7 +119,7 @@ export default function SafePay() {
                     <td className="py-4">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                         t.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 
-                        t.type === 'expense' ? 'bg-rose-100 text-rose-600' : 'bg-slate-200 text-slate-600'
+                        t.type === 'expense' ? 'bg-rose-100 text-rose-600' : 'bg-slate-200 text-slate-600 dark:text-slate-300'
                       }`}>
                         {t.type === 'transfer' ? (
                           <ArrowRightLeft size={18} />
@@ -131,14 +131,14 @@ export default function SafePay() {
                         )}
                       </div>
                     </td>
-                    <td className="py-4 font-bold text-slate-800">{t.note || 'No description'}</td>
-                    <td className="py-4 text-sm text-slate-600 font-medium">
+                    <td className="py-4 font-bold text-slate-800 dark:text-slate-200">{t.note || 'No description'}</td>
+                    <td className="py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">
                       {t.type === 'transfer' ? 'Transfer' : t.categories?.name || '-'}
                     </td>
-                    <td className="py-4 text-sm text-slate-500">{formatDateTime(t.date)}</td>
+                    <td className="py-4 text-sm text-slate-500 dark:text-slate-400">{formatDateTime(t.date)}</td>
                     <td className={`py-4 text-right font-extrabold ${
                       t.type === 'income' ? 'text-emerald-600' : 
-                      t.type === 'expense' ? 'text-slate-800' : 'text-slate-600'
+                      t.type === 'expense' ? 'text-slate-800 dark:text-slate-200' : 'text-slate-600 dark:text-slate-300'
                     }`}>
                       Rp {Number(t.amount).toLocaleString('id-ID')}
                     </td>
@@ -185,7 +185,7 @@ export default function SafePay() {
         maxWidth="max-w-md"
       >
         <form onSubmit={executeComplete} className="flex flex-col gap-6">
-          <p className="text-slate-600 text-sm">
+          <p className="text-slate-600 dark:text-slate-300 text-sm">
             Anda dapat menyesuaikan nominal akhir transaksi sebelum menyelesaikannya.
             Selisih dana akan otomatis disesuaikan dengan saldo utama Anda.
           </p>

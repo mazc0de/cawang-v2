@@ -129,8 +129,8 @@ export default function Budgeting() {
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Budgeting</h1>
-          <p className="text-slate-500 mt-1">Manage limits for this Salary Cycle.</p>
+          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Budgeting</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">Manage limits for this Salary Cycle.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
@@ -143,13 +143,13 @@ export default function Budgeting() {
 
       <div className="glass-panel rounded-[32px] p-8 flex flex-col md:flex-row items-center gap-8 border-l-8 border-l-indigo-500">
         <div className="w-full md:w-1/3">
-          <p className="text-slate-500 font-medium mb-1">Cycle Summary</p>
-          <h3 className="text-3xl font-extrabold text-slate-800">Rp {totalSpent.toLocaleString('id-ID')}</h3>
-          <p className="text-sm font-bold mt-2 text-slate-500">of Rp {totalLimit.toLocaleString('id-ID')} limit</p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium mb-1">Cycle Summary</p>
+          <h3 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200">Rp {totalSpent.toLocaleString('id-ID')}</h3>
+          <p className="text-sm font-bold mt-2 text-slate-500 dark:text-slate-400">of Rp {totalLimit.toLocaleString('id-ID')} limit</p>
         </div>
         <div className="w-full md:w-2/3">
           <div className="flex justify-between text-sm font-bold mb-2">
-            <span className="text-slate-600">Overall Usage</span>
+            <span className="text-slate-600 dark:text-slate-300">Overall Usage</span>
             <span className={overallProgress >= 100 ? 'text-rose-500' : 'text-indigo-600'}>
               {overallProgress.toFixed(1)}%
             </span>
@@ -171,7 +171,7 @@ export default function Budgeting() {
           <BudgetCardSkeleton />
         </div>
       ) : budgets.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 text-slate-500 bg-white/50 rounded-3xl border border-slate-100">
+        <div className="flex flex-col items-center justify-center p-12 text-slate-500 dark:text-slate-400 bg-white dark:bg-[#111111]/50 rounded-3xl border border-slate-100">
           <p>No budgets set up yet.</p>
           <p className="text-sm">Click "New Budget" to get started.</p>
         </div>
@@ -188,14 +188,14 @@ export default function Budgeting() {
               <div key={b.id} className="glass-card rounded-[24px] p-6 flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 dark:text-slate-300">
                       {(() => {
                         const IconCmp = getCategoryIcon(b.categories?.icon);
                         return <IconCmp size={20} />;
                       })()}
                     </div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-lg text-slate-800">{b.categories?.name || 'Category'}</h3>
+                      <h3 className="font-bold text-lg text-slate-800 dark:text-slate-200">{b.categories?.name || 'Category'}</h3>
                       <button 
                         onClick={() => {
                           setSelectedBudget(b);
@@ -224,10 +224,10 @@ export default function Budgeting() {
                       ) : isWarning ? (
                         <span className="text-amber-500">Hampir Habis</span>
                       ) : (
-                        <span className="text-slate-500">Aman / Sisa</span>
+                        <span className="text-slate-500 dark:text-slate-400">Aman / Sisa</span>
                       )}
                     </p>
-                    <p className={`font-extrabold ${isOver ? 'text-rose-500' : 'text-slate-800'}`}>
+                    <p className={`font-extrabold ${isOver ? 'text-rose-500' : 'text-slate-800 dark:text-slate-200'}`}>
                       {isOver ? '-' : ''}Rp {Math.abs(b.amount_limit - spent).toLocaleString('id-ID')}
                     </p>
                   </div>
@@ -235,7 +235,7 @@ export default function Budgeting() {
 
                 <div>
                   <div className="flex justify-between text-xs font-bold mb-2">
-                    <span className="text-slate-500">Rp {spent.toLocaleString('id-ID')}</span>
+                    <span className="text-slate-500 dark:text-slate-400">Rp {spent.toLocaleString('id-ID')}</span>
                     <span className={(isOver || isMaxed) ? 'text-rose-500' : isWarning ? 'text-amber-500' : 'text-emerald-500'}>
                       {progress.toFixed(1)}%
                     </span>

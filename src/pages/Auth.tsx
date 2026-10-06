@@ -78,15 +78,15 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
-      <div className="w-full max-w-md bg-white rounded-[32px] shadow-2xl p-8 border border-slate-100">
+      <div className="w-full max-w-md bg-white dark:bg-[#111111] rounded-[32px] shadow-2xl p-8 border border-slate-100">
         <div className="flex flex-col items-center mb-8">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200 mb-4">
             <Wallet size={32} />
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">
+          <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">
             {isForgotPassword ? 'Reset Password' : isLogin ? 'Welcome Back' : 'Create Account'}
           </h1>
-          <p className="text-slate-500 mt-2 text-center">
+          <p className="text-slate-500 dark:text-slate-400 mt-2 text-center">
             {isForgotPassword 
               ? 'Enter your email to receive a password reset link'
               : isLogin 
@@ -146,7 +146,7 @@ export default function Auth() {
                 <button 
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 dark:text-slate-300 focus:outline-none"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -164,7 +164,7 @@ export default function Auth() {
           </button>
         </form>
 
-        <div className="mt-8 text-center text-sm font-medium text-slate-500">
+        <div className="mt-8 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
           {isForgotPassword ? (
             <button 
               type="button"

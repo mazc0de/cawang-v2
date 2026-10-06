@@ -94,12 +94,12 @@ export default function Settings() {
   return (
     <div className="flex flex-col gap-8 max-w-4xl mx-auto">
       <div>
-        <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Settings</h1>
-        <p className="text-slate-500 mt-1">Configure your account and application preferences.</p>
+        <h1 className="text-3xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Settings</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">Configure your account and application preferences.</p>
       </div>
 
       <div className="glass-panel rounded-[32px] p-8 flex flex-col gap-6">
-        <h2 className="text-xl font-extrabold text-slate-800 border-b border-slate-200 pb-4 flex justify-between items-center">
+        <h2 className="text-xl font-extrabold text-slate-800 dark:text-slate-200 border-b border-slate-200 pb-4 flex justify-between items-center">
           Salary Cycle Setup
           <button 
             onClick={handleSaveCycle}
@@ -113,7 +113,7 @@ export default function Settings() {
         
         <div className="flex flex-col gap-2">
           <label className="font-bold text-slate-700">Salary Date (Cycle Start)</label>
-          <p className="text-sm text-slate-500 mb-2">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
             The date you receive your salary every month. All budgeting and analytics will be based on a period starting from this date to the day before it next month.
           </p>
           <div className="flex items-center gap-4">
@@ -145,7 +145,7 @@ export default function Settings() {
 
       <div className="glass-panel rounded-[32px] p-8 flex flex-col gap-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-          <h2 className="text-xl font-extrabold text-slate-800">Recurring Transactions</h2>
+          <h2 className="text-xl font-extrabold text-slate-800 dark:text-slate-200">Recurring Transactions</h2>
           <button 
             onClick={() => setIsModalOpen(true)}
             className="text-indigo-600 font-bold flex items-center gap-2 hover:bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors"
@@ -157,13 +157,13 @@ export default function Settings() {
         {loading ? (
           <ListSkeleton />
         ) : recurring.length === 0 ? (
-          <p className="text-slate-500 text-sm">No recurring transactions set up yet.</p>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">No recurring transactions set up yet.</p>
         ) : (
           recurring.map(r => (
             <div key={r.id} className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100 flex items-center justify-between">
               <div>
-                <h4 className="font-bold text-slate-800">{r.note || 'Recurring'}</h4>
-                <p className="text-sm text-slate-500">Every {r.frequency} • Rp {Number(r.amount).toLocaleString('id-ID')}</p>
+                <h4 className="font-bold text-slate-800 dark:text-slate-200">{r.note || 'Recurring'}</h4>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Every {r.frequency} • Rp {Number(r.amount).toLocaleString('id-ID')}</p>
               </div>
               <button onClick={() => setDeleteId(r.id)} className="text-rose-500 font-semibold text-sm hover:underline">Remove</button>
             </div>
