@@ -53,6 +53,16 @@ export default function Dashboard() {
   const todayIncome = todayTransactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
   const todayExpense = todayTransactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
   
+  // This Month's Transactions
+  const monthlyTransactions = transactions.filter(t => {
+    const d = new Date(t.date);
+    return d.getMonth() === today.getMonth() && 
+           d.getFullYear() === today.getFullYear();
+  });
+  
+  const monthlyIncome = monthlyTransactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
+  const monthlyExpense = monthlyTransactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
+  
   // Transactions Today
   const recentTransactions = todayTransactions;
 
@@ -116,9 +126,11 @@ export default function Dashboard() {
           <StatCard title="Available Balance" amount={`Rp ${availableBalance.toLocaleString('id-ID')}`} trend="Active balance" icon={CheckCircle2} color="emerald" />
           <StatCard title="Safe-Pay" amount={`Rp ${safePayLocked.toLocaleString('id-ID')}`} trend="Locked Funds" icon={ShieldCheck} color="indigo" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Income (Today)" amount={`Rp ${todayIncome.toLocaleString('id-ID')}`} trend="Today" icon={TrendingUp} color="emerald" />
           <StatCard title="Expense (Today)" amount={`Rp ${todayExpense.toLocaleString('id-ID')}`} trend="Today" icon={TrendingDown} color="rose" />
+          <StatCard title="Income (Month)" amount={`Rp ${monthlyIncome.toLocaleString('id-ID')}`} trend="This Month" icon={TrendingUp} color="emerald" />
+          <StatCard title="Expense (Month)" amount={`Rp ${monthlyExpense.toLocaleString('id-ID')}`} trend="This Month" icon={TrendingDown} color="rose" />
         </div>
       </div>
 
