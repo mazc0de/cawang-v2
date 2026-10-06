@@ -53,26 +53,21 @@ export default function Dashboard() {
   const todayIncome = todayTransactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
   const todayExpense = todayTransactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
   
-  // This Month's Transactions
-  const monthlyTransactions = transactions.filter(t => {
+  // This Cycle's Transactions
+  const cycleDates = getCycleDates(settings.salary_cycle_start_date);
+  const currentCycleTransactions = transactions.filter(t => {
     const d = new Date(t.date);
-    return d.getMonth() === today.getMonth() && 
-           d.getFullYear() === today.getFullYear();
+    return d >= cycleDates.start && d <= cycleDates.end;
   });
   
-  const monthlyIncome = monthlyTransactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
-  const monthlyExpense = monthlyTransactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
+  const cycleIncome = currentCycleTransactions.filter(t => t.type === 'income').reduce((acc, curr) => acc + Number(curr.amount), 0);
+  const cycleExpense = currentCycleTransactions.filter(t => t.type === 'expense').reduce((acc, curr) => acc + Number(curr.amount), 0);
   
   // Transactions Today
   const recentTransactions = todayTransactions;
 
   // Budget Left calculation
-  const cycleDates = getCycleDates(settings.salary_cycle_start_date);
-  const cycleExpenses = transactions.filter(t => 
-    t.type === 'expense' && 
-    new Date(t.date) >= cycleDates.start &&
-    new Date(t.date) <= cycleDates.end
-  );
+  const cycleExpenses = currentCycleTransactions.filter(t => t.type === 'expense');
   
   const totalLimit = budgets.reduce((acc, curr) => acc + Number(curr.amount_limit), 0);
   
@@ -129,8 +124,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Income (Today)" amount={`Rp ${todayIncome.toLocaleString('id-ID')}`} trend="Today" icon={TrendingUp} color="emerald" />
           <StatCard title="Expense (Today)" amount={`Rp ${todayExpense.toLocaleString('id-ID')}`} trend="Today" icon={TrendingDown} color="rose" />
-          <StatCard title="Income (Month)" amount={`Rp ${monthlyIncome.toLocaleString('id-ID')}`} trend="This Month" icon={TrendingUp} color="emerald" />
-          <StatCard title="Expense (Month)" amount={`Rp ${monthlyExpense.toLocaleString('id-ID')}`} trend="This Month" icon={TrendingDown} color="rose" />
+          <StatCard title="Income (Cycle)" amount={`Rp ${cycleIncome.toLocaleString('id-ID')}`} trend="This Cycle" icon={TrendingUp} color="emerald" />
+          <StatCard title="Expense (Cycle)" amount={`Rp ${cycleExpense.toLocaleString('id-ID')}`} trend="This Cycle" icon={TrendingDown} color="rose" />
         </div>
       </div>
 
