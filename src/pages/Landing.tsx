@@ -22,19 +22,19 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-white dark:bg-[#111111]/80 backdrop-blur-md border-b border-slate-200 z-50">
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200">
               <Wallet size={24} />
             </div>
-            <span className="font-extrabold text-2xl tracking-tight text-slate-800 dark:text-slate-200">Cawang</span>
+            <span className="font-extrabold text-2xl tracking-tight text-slate-800">Cawang</span>
           </div>
           <div className="flex items-center gap-4">
             {!hasSession && (
               <button 
                 onClick={() => navigate('/auth')}
-                className="text-slate-600 dark:text-slate-300 font-bold hover:text-indigo-600 transition-colors"
+                className="text-slate-600 font-bold hover:text-indigo-600 transition-colors"
               >
                 Sign In
               </button>
@@ -63,11 +63,11 @@ export default function Landing() {
             Introducing Salary Cycle Tracking
           </div>
           
-          <h1 className="text-6xl md:text-7xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight leading-tight mb-6">
+          <h1 className="text-6xl md:text-7xl font-extrabold text-slate-800 tracking-tight leading-tight mb-6">
             Track your money the way you <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-rose-500">actually earn it.</span>
           </h1>
           
-          <p className="text-xl text-slate-500 dark:text-slate-400 mb-10 max-w-2xl leading-relaxed">
+          <p className="text-xl text-slate-500 mb-10 max-w-2xl leading-relaxed">
             Calendar months don't make sense if you get paid on the 25th. Cawang tracks your budgets and cashflow based on your real Salary Cycle.
           </p>
           
@@ -116,12 +116,12 @@ function FeatureCard({ icon: Icon, title, desc, color }: any) {
   };
 
   return (
-    <div className="bg-white dark:bg-[#111111] rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-transform duration-300">
+    <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-transform duration-300">
       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${colors[color]}`}>
         <Icon size={28} />
       </div>
-      <h3 className="text-xl font-extrabold text-slate-800 dark:text-slate-200 mb-3">{title}</h3>
-      <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{desc}</p>
+      <h3 className="text-xl font-extrabold text-slate-800 mb-3">{title}</h3>
+      <p className="text-slate-500 leading-relaxed">{desc}</p>
     </div>
   );
 }

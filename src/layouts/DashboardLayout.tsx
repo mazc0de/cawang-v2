@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User, ShieldCheck } from 'lucide-react';
 import clsx from 'clsx';
 import { supabase } from '../lib/supabase';
-import { useTheme } from '../contexts/ThemeContext';
 
 export default function DashboardLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -37,7 +35,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
+    <div className="flex min-h-screen bg-slate-50 relative overflow-hidden">
       
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
@@ -50,21 +48,21 @@ export default function DashboardLayout() {
       {/* Sidebar */}
       <aside 
         className={clsx(
-          "fixed lg:sticky top-0 left-0 h-screen w-[280px] flex flex-col bg-white/95 dark:bg-[#111111]/95 backdrop-blur-[20px] border-r border-slate-200 dark:border-white/10 z-50 transform transition-transform duration-300 ease-in-out",
+          "fixed lg:sticky top-0 left-0 h-screen w-[280px] flex flex-col bg-white/95 backdrop-blur-[20px] border-r border-white/50 z-50 transform transition-transform duration-300 ease-in-out",
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Branding */}
         <div className="p-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-200">
               <Wallet size={24} />
             </div>
-            <span className="font-extrabold text-xl tracking-tight text-slate-800 dark:text-white">Cawang</span>
+            <span className="font-extrabold text-xl tracking-tight text-slate-800">Cawang</span>
           </div>
           {/* Close Menu Button (Mobile) */}
           <button 
-            className="lg:hidden p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5"
+            className="lg:hidden p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <X size={24} />
@@ -84,7 +82,7 @@ export default function DashboardLayout() {
                   'flex items-center gap-3 px-4 py-[14px] rounded-2xl transition-all duration-200',
                   isActive 
                     ? 'active-nav-link'
-                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-indigo-500 dark:hover:text-indigo-400'
+                    : 'text-slate-500 hover:bg-white/60 hover:text-indigo-500'
                 )
               }
             >
@@ -96,24 +94,24 @@ export default function DashboardLayout() {
 
         {/* Account profile card & Logout */}
         <div className="p-4 flex flex-col gap-2 shrink-0">
-          <div className="bg-indigo-50/80 dark:bg-indigo-900/20 rounded-2xl p-4 flex items-center gap-3 border border-indigo-100/50 dark:border-indigo-500/20">
+          <div className="bg-indigo-50/80 rounded-2xl p-4 flex items-center gap-3 border border-indigo-100/50">
             {user?.user_metadata?.avatar_url ? (
-              <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-10 h-10 rounded-full shrink-0 border-2 border-white dark:border-slate-800 shadow-sm" />
+              <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-10 h-10 rounded-full shrink-0 border-2 border-white shadow-sm" />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-indigo-200 dark:bg-indigo-900/50 shrink-0 flex items-center justify-center">
-                <User size={20} className="text-indigo-600 dark:text-indigo-400" />
+              <div className="w-10 h-10 rounded-full bg-indigo-200 shrink-0 flex items-center justify-center">
+                <User size={20} className="text-indigo-600" />
               </div>
             )}
             <div className="flex flex-col min-w-0">
-              <span className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{user?.user_metadata?.full_name || user?.email || 'User'}</span>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 truncate">Cawang User</span>
+              <span className="text-sm font-bold text-slate-800 truncate">{user?.user_metadata?.full_name || user?.email || 'User'}</span>
+              <span className="text-xs font-medium text-slate-500 truncate">Cawang User</span>
             </div>
           </div>
           <button 
             onClick={async () => {
               await supabase.auth.signOut();
             }}
-            className="w-full py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-colors text-center"
+            className="w-full py-2.5 text-sm font-bold text-rose-500 hover:bg-rose-50 rounded-xl transition-colors text-center"
           >
             Sign Out
           </button>
@@ -123,31 +121,42 @@ export default function DashboardLayout() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
         {/* Top Header Tool Bar */}
-        <header className="h-[72px] lg:h-[80px] shrink-0 sticky top-0 bg-white/70 dark:bg-[#0a0a0a]/70 backdrop-blur-md z-10 px-4 lg:px-8 flex items-center justify-between border-b border-slate-200 dark:border-white/10">
+        <header className="h-[72px] lg:h-[80px] shrink-0 sticky top-0 bg-white/70 backdrop-blur-md z-10 px-4 lg:px-8 flex items-center justify-between border-b border-white/30">
           <div className="flex items-center gap-3">
             {/* Hamburger (Mobile) */}
             <button 
-              className="lg:hidden p-2 -ml-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl transition-colors"
+              className="lg:hidden p-2 -ml-2 text-slate-600 hover:bg-white/80 rounded-xl transition-colors"
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu size={24} />
             </button>
             
-            <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-500">
               <span>Home</span>
               <ChevronRight size={16} />
-              <span className="text-slate-800 dark:text-slate-200 font-bold">{getCurrentPageName()}</span>
+              <span className="text-slate-800 font-bold">{getCurrentPageName()}</span>
             </div>
           </div>
           
           <div className="flex items-center gap-3 lg:gap-4">
-            <button 
-              onClick={toggleTheme}
-              className="w-[40px] h-[40px] lg:w-[42px] lg:h-[42px] bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 hover:shadow-md transition-all"
-              title="Toggle Dark Mode"
-            >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            {/* 
+            <div className="relative hidden sm:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input 
+                type="text" 
+                placeholder="Search transactions..."
+                className="pl-10 pr-4 py-2 w-[200px] lg:w-[256px] rounded-xl bg-white/60 border border-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 backdrop-blur-sm transition-all"
+              />
+            </div>
+            <button className="sm:hidden w-[40px] h-[40px] bg-white/80 border border-white/50 rounded-xl flex items-center justify-center text-slate-600 active:scale-95 transition-transform">
+              <Search size={20} />
             </button>
+
+            <button className="w-[40px] h-[40px] lg:w-[42px] lg:h-[42px] bg-white/80 border border-white/50 rounded-xl flex items-center justify-center text-slate-600 hover:text-indigo-500 hover:shadow-md transition-all relative">
+              <Bell size={20} />
+              <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+            </button>
+            */}
           </div>
         </header>
 

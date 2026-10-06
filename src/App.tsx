@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { ThemeProvider } from './contexts/ThemeContext';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
@@ -17,8 +16,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <ThemeProvider>
-      <Toaster position="top-right" toastOptions={{ className: 'font-bold dark:bg-slate-800 dark:text-white rounded-2xl shadow-xl' }} />
+    <>
+      <Toaster position="top-right" toastOptions={{ className: 'font-bold text-slate-800 rounded-2xl shadow-xl' }} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -40,7 +39,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+    </>
   );
 }
 
