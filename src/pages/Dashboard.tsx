@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Info, CheckCircle2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Info, CheckCircle2, Calendar, CalendarDays } from 'lucide-react';
 import { getTransactions, getAccounts, getBudgets, getSettings } from '../lib/queries';
 import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
@@ -121,11 +121,9 @@ export default function Dashboard() {
           <StatCard title="Available Balance" amount={`Rp ${availableBalance.toLocaleString('id-ID')}`} trend="Active balance" icon={CheckCircle2} color="emerald" />
           <StatCard title="Safe-Pay" amount={`Rp ${safePayLocked.toLocaleString('id-ID')}`} trend="Locked Funds" icon={ShieldCheck} color="indigo" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard title="Income (Today)" amount={`Rp ${todayIncome.toLocaleString('id-ID')}`} trend="Today" icon={TrendingUp} color="emerald" />
-          <StatCard title="Expense (Today)" amount={`Rp ${todayExpense.toLocaleString('id-ID')}`} trend="Today" icon={TrendingDown} color="rose" />
-          <StatCard title="Income (Cycle)" amount={`Rp ${cycleIncome.toLocaleString('id-ID')}`} trend="This Cycle" icon={TrendingUp} color="emerald" />
-          <StatCard title="Expense (Cycle)" amount={`Rp ${cycleExpense.toLocaleString('id-ID')}`} trend="This Cycle" icon={TrendingDown} color="rose" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SummaryStatCard title="Today" income={todayIncome} expense={todayExpense} icon={Calendar} />
+          <SummaryStatCard title="This Cycle" income={cycleIncome} expense={cycleExpense} icon={CalendarDays} />
         </div>
       </div>
 
@@ -210,6 +208,38 @@ function StatCard({ title, amount, trend, icon: Icon, color }: any) {
         <p className="text-slate-500 font-medium text-sm mb-1">{title}</p>
         <h3 className="text-2xl font-extrabold text-slate-800">{amount}</h3>
         <p className="text-sm font-bold mt-2 text-emerald-600">{trend}</p>
+      </div>
+    </div>
+  );
+}
+
+function SummaryStatCard({ title, income, expense, icon: Icon }: any) {
+  return (
+    <div className="glass-card rounded-3xl p-6 flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-600/10 text-indigo-600">
+            <Icon size={24} />
+          </div>
+          <h3 className="text-slate-800 font-bold text-lg">{title}</h3>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-1.5 text-emerald-600">
+            <TrendingUp size={16} />
+            <span className="text-xs font-bold tracking-wider uppercase">Income</span>
+          </div>
+          <p className="font-bold text-slate-800 text-lg">Rp {income.toLocaleString('id-ID')}</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-1.5 text-rose-600">
+            <TrendingDown size={16} />
+            <span className="text-xs font-bold tracking-wider uppercase">Expense</span>
+          </div>
+          <p className="font-bold text-slate-800 text-lg">Rp {expense.toLocaleString('id-ID')}</p>
+        </div>
       </div>
     </div>
   );
