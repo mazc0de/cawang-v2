@@ -43,7 +43,8 @@ export default function SafePay() {
       setIsProcessing(true);
       await updateTransaction(selectedTx.id, { 
         amount: finalAmount,
-        safe_pay_status: 'COMPLETED' 
+        safe_pay_status: 'COMPLETED',
+        date: new Date().toISOString()
       });
       toast.success('Transaksi Safe-Pay berhasil diselesaikan!');
       setSelectedTx(null);
