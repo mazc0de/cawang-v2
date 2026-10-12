@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Plus, ArrowRightLeft, ChevronDown, Trash2, ChevronLeft, ChevronRight, Calendar, Edit2, Search } from 'lucide-react';
+import { Plus, ArrowRightLeft, ChevronDown, Trash2, ChevronLeft, ChevronRight, Calendar, Edit2, Search, Layers } from 'lucide-react';
 import Modal from '../components/Modal';
 import ConfirmModal from '../components/ConfirmModal';
 import Calculator from '../components/Calculator';
 import CurrencyInput from '../components/CurrencyInput';
+import BulkTransactionModal from '../components/BulkTransactionModal';
 import { getTransactions, deleteTransaction, getAccounts, getCategories, createTransaction, updateTransaction } from '../lib/queries';
 import { getCategoryIcon } from '../lib/icons';
 import { TableSkeleton } from '../components/Skeletons';
@@ -15,6 +16,7 @@ export default function Transactions() {
   const [activeTab, setActiveTab] = useState('All');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,6 +35,7 @@ export default function Transactions() {
   const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
 
   const [isSafePay, setIsSafePay] = useState(false);
+  const [submitAndAddAnother, setSubmitAndAddAnother] = useState(false);
 
   useEffect(() => {
     loadTransactions();
@@ -86,9 +89,16 @@ export default function Transactions() {
 
       await createTransaction(payload);
       
-      setIsModalOpen(false);
-      setIsSafePay(false);
-      toast.success(isSafePay ? 'Safe-Pay transaction saved!' : 'Transaction saved successfully!');
+      if (submitAndAddAnother) {
+        setAmount(0);
+        setNoteStr('');
+        setIsSafePay(false);
+        toast.success(isSafePay ? 'Safe-Pay tersimpan! Silakan input transaksi berikutnya.' : 'Transaksi tersimpan! Silakan input transaksi berikutnya.');
+      } else {
+        setIsModalOpen(false);
+        setIsSafePay(false);
+        toast.success(isSafePay ? 'Safe-Pay transaction saved!' : 'Transaction saved successfully!');
+      }
       loadTransactions();
     } catch (error: any) {
       toast.error('Failed to save transaction');
@@ -203,18 +213,27 @@ export default function Transactions() {
           <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Transactions</h1>
           <p className="text-slate-500 mt-1">Manage and track all your financial activities.</p>
         </div>
-        <button 
-          onClick={() => {
-            setTransactionType('expense');
-            setAmount(0);
-            setNoteStr('');
-            setIsModalOpen(true);
-          }}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white p-4 md:px-5 md:py-2.5 rounded-full md:rounded-xl font-bold shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all active:scale-95 fixed bottom-6 right-6 z-40 md:static md:z-auto"
-        >
-          <Plus size={24} className="md:w-5 md:h-5" />
-          <span className="hidden md:inline">New Transaction</span>
-        </button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button 
+            onClick={() => setIsBulkModalOpen(true)}
+            className="flex-1 sm:flex-none bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/80 px-3.5 sm:px-4 py-2.5 rounded-xl font-bold shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 text-xs sm:text-sm"
+          >
+            <Layers size={17} />
+            <span>Bulk Transaction</span>
+          </button>
+          <button 
+            onClick={() => {
+              setTransactionType('expense');
+              setAmount(0);
+              setNoteStr('');
+              setIsModalOpen(true);
+            }}
+            className="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 transition-all active:scale-95 text-xs sm:text-sm"
+          >
+            <Plus size={18} />
+            <span>New Transaction</span>
+          </button>
+        </div>
       </div>
 
       {/* Date Navigation */}
@@ -412,6 +431,24 @@ export default function Transactions() {
           
           {/* Left Form Section */}
           <div className="flex-1 flex flex-col gap-6">
+
+            {/* Quick Bulk Switch Banner */}
+            <div className="flex items-center justify-between bg-indigo-50/70 border border-indigo-100 p-3 rounded-2xl text-xs">
+              <div className="flex items-center gap-2 text-indigo-900 font-medium">
+                <Layers size={15} className="text-indigo-600 shrink-0" />
+                <span>Mau catat banyak transaksi sekaligus tanpa bolak-balik?</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setIsBulkModalOpen(true);
+                }}
+                className="font-bold text-indigo-600 hover:text-indigo-800 bg-white px-3 py-1.5 rounded-xl border border-indigo-200/60 shadow-xs transition-all shrink-0 active:scale-95"
+              >
+                Buka Bulk Mode
+              </button>
+            </div>
             
             {/* Type Toggle Tabs */}
             <div className="flex bg-slate-100 p-1 rounded-2xl">
@@ -573,9 +610,23 @@ export default function Transactions() {
                 </label>
               </div>
 
-              <button type="submit" className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-extrabold text-lg shadow-lg shadow-indigo-200 transition-all active:scale-95">
-                Simpan Transaksi
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <button 
+                  type="submit" 
+                  onClick={() => setSubmitAndAddAnother(true)}
+                  className="flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 py-3.5 rounded-xl font-bold text-sm md:text-base border border-indigo-200 transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <Plus size={18} />
+                  Simpan & Tambah Lagi
+                </button>
+                <button 
+                  type="submit" 
+                  onClick={() => setSubmitAndAddAnother(false)}
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm md:text-base shadow-lg shadow-indigo-200 transition-all active:scale-95"
+                >
+                  Simpan Transaksi
+                </button>
+              </div>
             </form>
           </div>
 
@@ -707,6 +758,40 @@ export default function Transactions() {
         isLoading={isDeleting}
         title="Delete Transaction"
         message="Are you sure you want to delete this transaction? This action cannot be undone and will affect your account balance."
+      />
+
+      {/* Mobile Floating Action Buttons */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5 sm:hidden">
+        <button
+          type="button"
+          onClick={() => setIsBulkModalOpen(true)}
+          className="bg-white/95 text-indigo-700 border border-indigo-200 px-3.5 py-2 rounded-full font-bold text-xs shadow-lg shadow-slate-300/50 flex items-center gap-1.5 active:scale-95 backdrop-blur-sm"
+        >
+          <Layers size={15} />
+          <span>Bulk Add</span>
+        </button>
+        <button 
+          type="button"
+          onClick={() => {
+            setTransactionType('expense');
+            setAmount(0);
+            setNoteStr('');
+            setIsModalOpen(true);
+          }}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full font-bold shadow-xl shadow-indigo-500/35 flex items-center justify-center transition-all active:scale-95"
+          aria-label="New Transaction"
+        >
+          <Plus size={24} />
+        </button>
+      </div>
+
+      <BulkTransactionModal
+        isOpen={isBulkModalOpen}
+        onClose={() => setIsBulkModalOpen(false)}
+        onSuccess={loadTransactions}
+        categories={categories}
+        accounts={accounts}
+        initialDate={selectedDate}
       />
     </div>
   );

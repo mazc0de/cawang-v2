@@ -33,6 +33,24 @@ export async function createTransaction(payload: any) {
 }
 
 /**
+ * INSERT MULTIPLE TRANSACTIONS (BULK)
+ */
+export async function createBulkTransactions(payloads: any[]) {
+  if (!payloads || payloads.length === 0) return [];
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const records = payloads.map(p => ({ ...p, user_id: user.id }));
+  const { data, error } = await supabase
+    .from('transactions')
+    .insert(records)
+    .select();
+  if (error) throw error;
+  return data || [];
+}
+
+
+/**
  * FETCH ACCOUNTS
  */
 export async function getAccounts() {

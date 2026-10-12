@@ -27,7 +27,7 @@ export default function Calculator({ onResult }: CalculatorProps) {
         setResult(finalRes.toString());
         setExpression(finalRes.toString());
         onResult(finalRes);
-      } catch (e) {
+      } catch {
         setResult('Error');
       }
       return;

@@ -9,18 +9,33 @@ interface CurrencyInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   defaultValue?: number;
 }
 
+const formatNumber = (val: string) => {
+  // Hanya ambil digit angka dan tanda minus
+  const cleanVal = val.replace(/[^\d-]/g, '');
+  if (!cleanVal || cleanVal === '-') return cleanVal;
+  
+  // Format dengan pemisah ribuan titik (style Indonesia)
+  const number = parseInt(cleanVal, 10);
+  if (isNaN(number)) return '';
+  return number.toLocaleString('id-ID');
+};
+
 export default function CurrencyInput({ value, onChange, defaultValue, name, className, ...props }: CurrencyInputProps) {
-  const [displayValue, setDisplayValue] = useState('');
+  const [displayValue, setDisplayValue] = useState(() => {
+    if (value !== undefined) {
+      return value === 0 ? '' : formatNumber(value.toString());
+    }
+    if (defaultValue !== undefined) {
+      return formatNumber(defaultValue.toString());
+    }
+    return '';
+  });
 
   // Sinkronisasi dengan value dari luar (misal dari state)
   useEffect(() => {
     if (value !== undefined) {
-      if (value === 0 && displayValue === '') {
-        // Biarkan kosong jika user belum mengetik, atau isi '0' tergantung UX.
-        setDisplayValue(value.toString());
-      } else {
-        setDisplayValue(formatNumber(value.toString()));
-      }
+      const formatted = value === 0 ? '' : formatNumber(value.toString());
+      setDisplayValue(formatted);
     }
   }, [value]);
 
@@ -30,17 +45,6 @@ export default function CurrencyInput({ value, onChange, defaultValue, name, cla
       setDisplayValue(formatNumber(defaultValue.toString()));
     }
   }, [defaultValue, value]);
-
-  const formatNumber = (val: string) => {
-    // Hanya ambil digit angka dan tanda minus
-    const cleanVal = val.replace(/[^\d-]/g, '');
-    if (!cleanVal || cleanVal === '-') return cleanVal;
-    
-    // Format dengan pemisah ribuan titik (style Indonesia)
-    const number = parseInt(cleanVal, 10);
-    if (isNaN(number)) return '';
-    return number.toLocaleString('id-ID');
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawVal = e.target.value;

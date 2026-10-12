@@ -21,10 +21,6 @@ export default function Settings() {
   const [cycleDate, setCycleDate] = useState<number>(1);
   const [isSavingCycle, setIsSavingCycle] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   async function loadData() {
     try {
       setLoading(true);
@@ -40,6 +36,10 @@ export default function Settings() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   async function loadRecurring() {
     try {
