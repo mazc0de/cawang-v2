@@ -1,10 +1,42 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Info, CheckCircle2, Calendar, CalendarDays } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, ShieldCheck, Info, CheckCircle2, Calendar, CalendarDays, Clock } from 'lucide-react';
 import { getTransactions, getAccounts, getBudgets, getSettings } from '../lib/queries';
 import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
 import { ListSkeleton } from '../components/Skeletons';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+
+interface CycleCountdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  start: Date;
+  end: Date;
+  targetTime: Date;
+}
+
+function calculateCycleCountdown(salaryCycleStartDate: number = 1): CycleCountdown {
+  const now = new Date();
+  const { start, end } = getCycleDates(salaryCycleStartDate, now);
+  const targetTime = new Date(end.getTime() + 1);
+  const diff = Math.max(0, targetTime.getTime() - now.getTime());
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    start,
+    end,
+    targetTime
+  };
+}
 
 export default function Dashboard() {
   useDocumentTitle('Dashboard');
@@ -13,6 +45,9 @@ export default function Dashboard() {
   const [budgets, setBudgets] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>({ salary_cycle_start_date: 1 });
   const [loading, setLoading] = useState(true);
+  const [countdown, setCountdown] = useState<CycleCountdown>(() =>
+    calculateCycleCountdown(1)
+  );
 
   useEffect(() => {
     async function loadData() {
@@ -36,6 +71,16 @@ export default function Dashboard() {
     }
     loadData();
   }, []);
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      setCountdown(calculateCycleCountdown(settings.salary_cycle_start_date));
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [settings.salary_cycle_start_date]);
 
   const availableBalance = accounts.reduce((acc, curr) => acc + Number(curr.balance), 0);
   const safePayLocked = transactions.filter(t => t.is_safe_pay && t.safe_pay_status === 'PENDING').reduce((acc, curr) => acc + Number(curr.amount), 0);
@@ -89,7 +134,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-8 max-w-6xl mx-auto">
       {/* Hero Welcome Section */}
-      <div className="relative overflow-hidden hero-gradient rounded-3xl md:rounded-[40px] p-6 md:p-10 flex flex-col md:flex-row shadow-xl shadow-indigo-500/20">
+      <div className="relative overflow-hidden hero-gradient rounded-3xl md:rounded-[40px] p-6 md:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-xl shadow-indigo-500/20">
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/20 rounded-full blur-[60px]"></div>
         <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-indigo-900/30 rounded-full blur-[60px]"></div>
         
@@ -112,6 +157,60 @@ export default function Dashboard() {
             <span>{budgetLeft >= 0 ? 'left to spend' : 'over budget'} this cycle.</span>
           </h1>
         </div>
+
+        {/* Countdown to Next Cycle Widget */}
+        <div className="relative z-10 shrink-0 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col gap-3.5 min-w-[280px] sm:min-w-[340px]">
+          <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 bg-white/15 text-white rounded-xl shadow-inner">
+                <Clock size={18} className="animate-pulse text-amber-300" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-indigo-100">Ganti Cycle Dalam</p>
+                <p className="text-[11px] text-white/80 font-medium">
+                  Periode baru: {countdown.targetTime.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+              </div>
+            </div>
+            <span className="text-[11px] font-extrabold px-2.5 py-1 bg-white/20 text-white rounded-full">
+              Tgl {settings.salary_cycle_start_date || 1}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-2 pt-0.5 text-center">
+            {/* Hari */}
+            <div className="bg-black/25 backdrop-blur-md rounded-2xl py-2.5 px-1 border border-white/10 flex flex-col items-center">
+              <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">
+                {String(countdown.days).padStart(2, '0')}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 mt-1.5">Hari</span>
+            </div>
+
+            {/* Jam */}
+            <div className="bg-black/25 backdrop-blur-md rounded-2xl py-2.5 px-1 border border-white/10 flex flex-col items-center">
+              <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">
+                {String(countdown.hours).padStart(2, '0')}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 mt-1.5">Jam</span>
+            </div>
+
+            {/* Menit */}
+            <div className="bg-black/25 backdrop-blur-md rounded-2xl py-2.5 px-1 border border-white/10 flex flex-col items-center">
+              <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">
+                {String(countdown.minutes).padStart(2, '0')}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 mt-1.5">Menit</span>
+            </div>
+
+            {/* Detik */}
+            <div className="bg-black/25 backdrop-blur-md rounded-2xl py-2.5 px-1 border border-white/10 flex flex-col items-center">
+              <span className="text-2xl sm:text-3xl font-black text-amber-300 tabular-nums leading-none">
+                {String(countdown.seconds).padStart(2, '0')}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200/90 mt-1.5">Detik</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Statistics Grid */}
@@ -123,7 +222,18 @@ export default function Dashboard() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <SummaryStatCard title="Today" income={todayIncome} expense={todayExpense} icon={Calendar} />
-          <SummaryStatCard title="This Cycle" income={cycleIncome} expense={cycleExpense} icon={CalendarDays} />
+          <SummaryStatCard 
+            title="This Cycle" 
+            income={cycleIncome} 
+            expense={cycleExpense} 
+            icon={CalendarDays} 
+            badge={
+              <span className="tabular-nums flex items-center gap-1.5">
+                <Clock size={13} className="text-indigo-500" />
+                {countdown.days}h {countdown.hours}j {countdown.minutes}m {countdown.seconds}d lagi
+              </span>
+            }
+          />
         </div>
       </div>
 
@@ -213,16 +323,21 @@ function StatCard({ title, amount, trend, icon: Icon, color }: any) {
   );
 }
 
-function SummaryStatCard({ title, income, expense, icon: Icon }: any) {
+function SummaryStatCard({ title, income, expense, icon: Icon, badge }: any) {
   return (
     <div className="glass-card rounded-3xl p-6 flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-600/10 text-indigo-600">
             <Icon size={24} />
           </div>
           <h3 className="text-slate-800 font-bold text-lg">{title}</h3>
         </div>
+        {badge && (
+          <div className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 flex items-center gap-1.5 shadow-xs">
+            {badge}
+          </div>
+        )}
       </div>
       
       <div className="grid grid-cols-2 gap-4">
