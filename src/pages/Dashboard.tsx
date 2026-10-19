@@ -5,6 +5,8 @@ import { getCycleDates } from '../lib/utils';
 import { getCategoryIcon } from '../lib/icons';
 import { ListSkeleton } from '../components/Skeletons';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { useHideAmounts } from '../hooks/useHideAmounts';
+import AmountToggle from '../components/AmountToggle';
 
 interface CycleCountdown {
   days: number;
@@ -40,6 +42,7 @@ function calculateCycleCountdown(salaryCycleStartDate: number = 1): CycleCountdo
 
 export default function Dashboard() {
   useDocumentTitle('Dashboard');
+  const { formatAmount } = useHideAmounts();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [accounts, setAccounts] = useState<any[]>([]);
   const [budgets, setBudgets] = useState<any[]>([]);
@@ -145,7 +148,7 @@ export default function Dashboard() {
           <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-xl flex flex-wrap items-center gap-2">
             <span>You have</span>
             <span className={budgetLeft >= 0 ? "text-emerald-300 flex items-center gap-2" : "text-rose-300 flex items-center gap-2"}>
-              Rp {Math.abs(budgetLeft).toLocaleString('id-ID')}
+              Rp {formatAmount(Math.abs(budgetLeft), 'dashboard.budgetLeft')}
               <div className="relative group flex items-center justify-center">
                 <Info size={28} className="text-white/70 hover:text-white cursor-pointer transition-colors" />
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-sm font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
@@ -153,6 +156,7 @@ export default function Dashboard() {
                   <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-800 rotate-45"></div>
                 </div>
               </div>
+              <AmountToggle cardKey="dashboard.budgetLeft" size={28} className="text-white/70 hover:text-white" />
             </span>
             <span>{budgetLeft >= 0 ? 'left to spend' : 'over budget'} this cycle.</span>
           </h1>
@@ -216,14 +220,15 @@ export default function Dashboard() {
       {/* Statistics Grid */}
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard title="Total Balance" amount={`Rp ${totalBalance.toLocaleString('id-ID')}`} trend="All accounts + Safe-Pay" icon={Wallet} color="indigo" />
-          <StatCard title="Available Balance" amount={`Rp ${availableBalance.toLocaleString('id-ID')}`} trend="Active balance" icon={CheckCircle2} color="emerald" />
-          <StatCard title="Safe-Pay" amount={`Rp ${safePayLocked.toLocaleString('id-ID')}`} trend="Locked Funds" icon={ShieldCheck} color="indigo" />
+          <StatCard title="Total Balance" amount={totalBalance} cardKey="dashboard.totalBalance" trend="All accounts + Safe-Pay" icon={Wallet} color="indigo" />
+          <StatCard title="Available Balance" amount={availableBalance} cardKey="dashboard.availableBalance" trend="Active balance" icon={CheckCircle2} color="emerald" />
+          <StatCard title="Safe-Pay" amount={safePayLocked} cardKey="dashboard.safePay" trend="Locked Funds" icon={ShieldCheck} color="indigo" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SummaryStatCard title="Today" income={todayIncome} expense={todayExpense} icon={Calendar} />
+          <SummaryStatCard title="Today" cardKey="dashboard.today" income={todayIncome} expense={todayExpense} icon={Calendar} />
           <SummaryStatCard 
-            title="This Cycle" 
+            title="This Cycle"
+            cardKey="dashboard.cycle"
             income={cycleIncome} 
             expense={cycleExpense} 
             icon={CalendarDays} 
@@ -299,7 +304,8 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ title, amount, trend, icon: Icon, color }: any) {
+function StatCard({ title, amount, cardKey, trend, icon: Icon, color }: any) {
+  const { formatAmount } = useHideAmounts();
   const colorMap: any = {
     indigo: 'text-indigo-600 bg-indigo-600/10',
     emerald: 'text-emerald-600 bg-emerald-600/10',
@@ -313,17 +319,20 @@ function StatCard({ title, amount, trend, icon: Icon, color }: any) {
         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorMap[color]}`}>
           <Icon size={24} />
         </div>
+        <AmountToggle cardKey={cardKey} size={18} />
       </div>
       <div>
         <p className="text-slate-500 font-medium text-sm mb-1">{title}</p>
-        <h3 className="text-2xl font-extrabold text-slate-800">{amount}</h3>
+        <h3 className="text-2xl font-extrabold text-slate-800">Rp {formatAmount(amount, cardKey)}</h3>
         <p className="text-sm font-bold mt-2 text-emerald-600">{trend}</p>
       </div>
     </div>
   );
 }
 
-function SummaryStatCard({ title, income, expense, icon: Icon, badge }: any) {
+function SummaryStatCard({ title, cardKey, income, expense, icon: Icon, badge }: any) {
+  const { formatAmount } = useHideAmounts();
+
   return (
     <div className="glass-card rounded-3xl p-6 flex flex-col gap-6">
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -333,11 +342,14 @@ function SummaryStatCard({ title, income, expense, icon: Icon, badge }: any) {
           </div>
           <h3 className="text-slate-800 font-bold text-lg">{title}</h3>
         </div>
-        {badge && (
-          <div className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 flex items-center gap-1.5 shadow-xs">
-            {badge}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {badge && (
+            <div className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 flex items-center gap-1.5 shadow-xs">
+              {badge}
+            </div>
+          )}
+          <AmountToggle cardKey={cardKey} size={18} />
+        </div>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
@@ -346,14 +358,14 @@ function SummaryStatCard({ title, income, expense, icon: Icon, badge }: any) {
             <TrendingUp size={16} />
             <span className="text-xs font-bold tracking-wider uppercase">Income</span>
           </div>
-          <p className="font-bold text-slate-800 text-lg">Rp {income.toLocaleString('id-ID')}</p>
+          <p className="font-bold text-slate-800 text-lg">Rp {formatAmount(income, cardKey)}</p>
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1.5 text-rose-600">
             <TrendingDown size={16} />
             <span className="text-xs font-bold tracking-wider uppercase">Expense</span>
           </div>
-          <p className="font-bold text-slate-800 text-lg">Rp {expense.toLocaleString('id-ID')}</p>
+          <p className="font-bold text-slate-800 text-lg">Rp {formatAmount(expense, cardKey)}</p>
         </div>
       </div>
     </div>

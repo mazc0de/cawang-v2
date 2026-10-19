@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Receipt, Wallet, PieChart, Calendar, Settings, ChevronRight, Tags, Menu, X, User, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import clsx from 'clsx';
 import { supabase } from '../lib/supabase';
+import { useHideAmounts } from '../hooks/useHideAmounts';
 
 export default function DashboardLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const location = useLocation();
+  const { allHidden: amountsHidden, toggleAll: toggleAllAmounts } = useHideAmounts();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -139,7 +141,24 @@ export default function DashboardLayout() {
           </div>
           
           <div className="flex items-center gap-3 lg:gap-4">
-            {/* 
+            {/* Show/hide all amounts – only the Dashboard has hideable amounts */}
+            {location.pathname === '/app' && (
+              <button
+                onClick={toggleAllAmounts}
+                title={amountsHidden ? 'Tampilkan semua nominal' : 'Sembunyikan semua nominal'}
+                aria-label={amountsHidden ? 'Tampilkan semua nominal' : 'Sembunyikan semua nominal'}
+                aria-pressed={amountsHidden}
+                className={clsx(
+                  "w-[40px] h-[40px] lg:w-[42px] lg:h-[42px] border rounded-xl flex items-center justify-center hover:shadow-md transition-all",
+                  amountsHidden
+                    ? "bg-indigo-50 border-indigo-100 text-indigo-600"
+                    : "bg-white/80 border-white/50 text-slate-600 hover:text-indigo-500"
+                )}
+              >
+                {amountsHidden ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            )}
+            {/*
             <div className="relative hidden sm:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input 
