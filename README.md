@@ -1,4 +1,4 @@
-# Cawang - Personal Finance Tracker 💰
+# Cawang - Personal Finance Tracker 💰 [DEPRECATED]
 
 **Cawang** is a modern, feature-rich Personal Finance Management application built to help you track your income, expenses, budgets, and financial goals effortlessly. It offers an intuitive user interface, dynamic budgeting tools, and a cycle-based calendar tailored to your custom salary dates.
 
